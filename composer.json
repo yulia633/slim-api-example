@@ -1,0 +1,12 @@
+{
+    "name": "yulia633/api-slim-example",
+    "description": "API project",
+    "keywords": ["framework", "slim", "learning"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "slim/slim": "^4.7",
+        "slim/psr7": "^1.4",
+        "slim/http": "^1.2"
+    }
+}
