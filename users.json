@@ -1,18 +1,27 @@
 [
     {
         "id": 1,
-        "username": "Maria"
+        "username": "Maria",
+        "email": "test@test.ru"
     },
     {
         "id": 2,
-        "username": "Ivan"
+        "username": "Ivan",
+        "email": "test@test.ru"
     },
     {
         "id": 3,
-        "username": "Mila"
+        "username": "Mila",
+        "email": "test@test.ru"
     },
     {
         "id": 4,
-        "username": "Renat"
+        "username": "Renat",
+        "email": "test@test.ru"
+    },
+    {
+        "id": "60a6827f6f26f",
+        "username": "test2",
+        "email": "test@test.ru"
     }
 ]
