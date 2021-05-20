@@ -7,6 +7,7 @@ use Slim\Factory\AppFactory;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Model\User;
+use App\Db;
 
 $app = AppFactory::create();
 $app->addErrorMiddleware(true, true, true);
@@ -20,10 +21,7 @@ $app->get('/', function (Request $request, Response $response) {
 // Показать все записи из БД
 $app->get('/users', function (Request $request, Response $response) {
     // $users = new User();
-    $users = [
-        ['name' => 'Julia', 'email' => '123@goog'],
-        ['name' => 'Tina', 'email' => '567@goog'],
-    ];
+    $users = new Db('users');
     $response->getBody()->write(json_encode($users));
     return $response
         ->withHeader('Content-Type', 'application/json');

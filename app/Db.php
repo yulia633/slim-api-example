@@ -23,4 +23,12 @@ class Db
     {
         $this->data = json_decode(file_get_contents($this->path), true);
     }
+
+    public function setContent($content)
+    {
+        $this->path = "{$path}.json";
+        $result = file_put_contents($this->path, json_encode($content, JSON_UNESCAPED_UNICODE));
+
+        return $result;
+    }
 }
