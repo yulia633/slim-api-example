@@ -6,5 +6,17 @@ setup: prepare-db install
 install:
 	composer install
 
+validate:
+	composer validate
+
 prepare-db:
 	touch users.json
+
+lint:
+	composer exec -v phpcs -- --standard=PSR12 bin app tests
+
+test:
+	composer exec -v phpunit tests
+
+test-coverage:
+	composer exec -v phpunit tests -- --coverage-clover build/logs/clover.xml
