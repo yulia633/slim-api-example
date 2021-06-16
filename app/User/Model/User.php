@@ -14,7 +14,7 @@ class User
         $this->email = $email;
     }
 
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data)
     {
         $user = new self($data['username'], $data['email']);
         $user->id = $data['id'];

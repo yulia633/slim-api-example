@@ -47,13 +47,32 @@ class UserJsonStorage implements UserStorageInterface
         return $user;
     }
 
-    public function update(array $data): void
+    public function update(array $data)
     {
-        //
+        $updateUser = [];
+        $users = $this->all();
+
+        foreach ($users as $i => $user) {
+            if ($user['id'] === $id) {
+                $users[$i] = $updateUser = array_merge($user, $data);
+            }
+        }
+
+        JsonStorage::writeFile($users);
+
+        return $updateUser;
     }
 
     public function delete(string $id)
     {
-        //
+        $users = $this->all();
+
+        foreach ($users as $i => $user) {
+            if ($user['id'] === $id) {
+                array_slice($users, $i, 1);
+            }
+        }
+
+        JsonStorage::writeFile($users);
     }
 }

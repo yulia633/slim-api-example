@@ -11,7 +11,7 @@ use App\User\Storage\UserJsonStorage;
 $app = AppFactory::create();
 $app->addErrorMiddleware(true, true, true);
 
-// Define app routes
+// Дефолтный роутер
 $app->get('/', function (Request $request, Response $response) {
     $response->getBody()->write("Hello, Slim");
     return $response;
@@ -47,10 +47,31 @@ $app->get('/users/{id}', function (Request $request, Response $response, $args) 
     return $response->withHeader('Content-Type', 'application/json');
 })->setName('users.show');
 
+
+
 $app->put('/users/{id}', function (Request $request, Response $response, $args) {
+    $storage = new UserJsonStorage();
+    $id = $args['id'];
+
+    $user = $storage->getById($id);
+
+    if (!empty($user)) {
+        $user = $storage->update($id);
+    }
+
+    return $response
+        ->withHeader('Content-Type', 'application/json');
 })->setName('users.update');
 
-$app->delete('/users/{id}', function (Request $request, Response $response, $args) {
+$app->delete("/users/{id}", function (Request $request, Response $response, $args) {
+    $storage = new UserJsonStorage();
+    $id = $args['id'];
+
+    $storage->getById($id);
+    $storage->delete($id);
+
+    return $response
+        ->withHeader('Content-Type', 'application/json');
 })->setName('users.destroy');
 
 // POST http::localhost:8080/users
@@ -65,12 +86,5 @@ $app->post('/users', function (Request $request, Response $response) {
 
     return $response->withHeader('Content-Type', 'application/json');
 })->setName('users.store');
-
-
-/* to do*/
-// Показать запись по ID
-// Добавить запись в БД
-// Редактировать запись в БД по ID
-// Удалить запись по ID
 
 $app->run();
