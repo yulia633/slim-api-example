@@ -11,21 +11,21 @@ use function Funct\Collection\firstN;
 $app = AppFactory::create();
 $app->addErrorMiddleware(true, true, true);
 
+$helper = new App\Helper\SlimHelper();
+
 $app->get('/', function (Request $request, Response $response) {
     $response->getBody()->write("Hello, Slim");
     return $response;
 });
 
-$app->get('/users', function (Request $request, Response $response) {
+$app->get('/users', function (Request $request, Response $response) use ($helper) {
     $storage = new UserJsonStorage();
     $users = $storage->all();
 
-    $response->getBody()->write(json_encode($users));
-
-    return $response->withHeader('Content-Type', 'application/json');
+    return $helper->response($response, $users, '', 200);
 })->setName('users.index');
 
-$app->get('/users/{id}', function (Request $request, Response $response, $args) {
+$app->get('/users/{id}', function (Request $request, Response $response, $args) use ($helper) {
     $storage = new UserJsonStorage();
     $id = $args['id'];
 
@@ -40,12 +40,10 @@ $app->get('/users/{id}', function (Request $request, Response $response, $args) 
         ],
     ];
 
-    $response->getBody()->write(json_encode($responseBody));
-
-    return $response->withHeader('Content-Type', 'application/json');
+    return $helper->response($response, $responseBody, '', 200);
 })->setName('users.show');
 
-$app->put("/users/{id}", function (Request $request, Response $response, $args) {
+$app->put("/users/{id}", function (Request $request, Response $response, $args) use ($helper) {
     $storage = new UserJsonStorage();
     $id = $args['id'];
 
@@ -54,27 +52,14 @@ $app->put("/users/{id}", function (Request $request, Response $response, $args) 
     $findUser = $storage->getById($id);
     $encodedUser = $findUser->toArray($findUser);
 
-    if (isset($data['id']) && $newDataUsers['id'] !== $encodedUser['id']) {
-        $response->getBody()->write(json_encode([
-            "data" => $newDataUsers,
-            "code" => 422,
-            "message" => "Неправильное значение id= {$newDataUsers['id']}"
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    } elseif (!empty($findUser)) {
+    if (!empty($findUser)) {
         $merged = [firstN($encodedUser), $newDataUsers];
         $storage->update($merged);
-        $response->getBody()->write(json_encode([
-            "data" => $merged,
-            "code" => 200,
-            "message" => "Данные успешно обновлены"
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        return $helper->response($response, $merged, "Данные успешно обновлены", 201);
     }
-
-    return $response
-        ->withHeader('Content-Type', 'application/json');
 });
 
-$app->delete("/users/{id}", function (Request $request, Response $response, $args) {
+$app->delete("/users/{id}", function (Request $request, Response $response, $args) use ($helper) {
     $storage = new UserJsonStorage();
     $id = $args['id'];
 
@@ -83,29 +68,16 @@ $app->delete("/users/{id}", function (Request $request, Response $response, $arg
 
     $storage->delete($encodedUser['id']);
 
-    $response->getBody()->write(json_encode([
-        "data" => $encodedUser,
-        "code" => 200,
-        "message" => "Данные успешно удалены"
-    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-    return $response
-        ->withHeader('Content-Type', 'application/json');
+    return $helper->response($response, $encodedUser, "Данные успешно удалены", 200);
 })->setName('users.destroy');
 
-$app->post('/users', function (Request $request, Response $response) {
+$app->post('/users', function (Request $request, Response $response) use ($helper) {
     $data = $request->getParsedBody();
 
     $storage = new UserJsonStorage();
     $storage->create($data);
 
-    $response->getBody()->write(json_encode([
-        "data" => $data,
-        "code" => 200,
-        "message" => "Данные успешно добавлены"
-    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-    return $response->withHeader('Content-Type', 'application/json');
+    return $helper->response($response, $data, "Данные успешно добавлены", 200);
 })->setName('users.store');
 
 $app->run();
