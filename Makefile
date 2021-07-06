@@ -13,7 +13,7 @@ prepare-db:
 	touch users.json
 
 lint:
-	composer exec -v phpcs -- --standard=PSR12 bin app tests
+	composer exec -v phpcs -- --standard=PSR12 public app
 
 test:
 	composer exec -v phpunit tests
