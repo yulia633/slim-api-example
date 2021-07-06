@@ -1,27 +1,27 @@
-[
-    {
-        "id": 1,
-        "username": "Maria",
+{
+    "1": {
+        "id": "60e45e4e4b21d",
+        "username": "Renat12",
         "email": "test@test.ru"
     },
-    {
-        "id": 2,
-        "username": "Ivan",
+    "2": {
+        "id": "60e45e59bd44f",
+        "username": "Renat12",
         "email": "test@test.ru"
     },
-    {
-        "id": 3,
-        "username": "Mila",
+    "3": {
+        "id": "60e45e8adcf75",
+        "username": "Renat13",
         "email": "test@test.ru"
     },
-    {
-        "id": 4,
-        "username": "Renat",
-        "email": "test@test.ru"
+    "4": {
+        "id": "60e45ea48b1dd",
+        "username": "Nina",
+        "email": "nina@test.ru"
     },
-    {
-        "id": "60a6827f6f26f",
-        "username": "test2",
-        "email": "test@test.ru"
+    "5": {
+        "id": "60e462a5c4053",
+        "username": "Vasiy",
+        "email": "vasyi@ya.ru"
     }
-]
+}

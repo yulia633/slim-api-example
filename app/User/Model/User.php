@@ -14,10 +14,10 @@ class User
         $this->email = $email;
     }
 
-    public static function fromArray(array $data)
+    public static function fromArray(array $data): User
     {
         $user = new self($data['username'], $data['email']);
-        $user->id = $data['id'];
+        $user->id = $data['id'] ?? null;
 
         return $user;
     }

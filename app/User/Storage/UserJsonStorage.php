@@ -34,7 +34,7 @@ class UserJsonStorage implements UserStorageInterface
         throw new \DomainException('User not Found');
     }
 
-    public function create(array $data): User
+    public function create(array $data): void
     {
         $user = User::fromArray($data);
         $id = uniqid();
@@ -43,36 +43,33 @@ class UserJsonStorage implements UserStorageInterface
         $users = JsonStorage::readFile();
         $users[] = $user->toArray();
         $user = JsonStorage::writeFile($users);
-
-        return $user;
     }
 
     public function update(array $data)
     {
-        $updateUser = [];
         $users = $this->all();
-
-        foreach ($users as $i => $user) {
-            if ($user['id'] === $id) {
-                $users[$i] = $updateUser = array_merge($user, $data);
+        [$idUsers, $newUsers] = $data;
+        $updateUsers = array_map(function ($user) use ($newUsers, $idUsers) {
+            if ($user['id'] === $idUsers['id']) {
+                $user['username'] = $newUsers['username'];
+                $user['email'] = $newUsers['email'];
             }
-        }
+            return $user;
+        }, $users);
 
-        JsonStorage::writeFile($users);
-
-        return $updateUser;
+        $users[] = JsonStorage::writeFile($updateUsers);
     }
 
     public function delete(string $id)
     {
         $users = $this->all();
 
-        foreach ($users as $i => $user) {
-            if ($user['id'] === $id) {
-                array_slice($users, $i, 1);
+        $deleteUsers = array_filter($users, function ($user) use ($id) {
+            if ($user['id'] !== $id) {
+                return $user;
             }
-        }
+        });
 
-        JsonStorage::writeFile($users);
+        JsonStorage::writeFile($deleteUsers);
     }
 }

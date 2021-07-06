@@ -1,23 +1,21 @@
 <?php
 
-// Подключение автозагрузки через composer
 require __DIR__ . '/../vendor/autoload.php';
 
 use Slim\Factory\AppFactory;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\User\Storage\UserJsonStorage;
+use function Funct\Collection\firstN;
 
 $app = AppFactory::create();
 $app->addErrorMiddleware(true, true, true);
 
-// Дефолтный роутер
 $app->get('/', function (Request $request, Response $response) {
     $response->getBody()->write("Hello, Slim");
     return $response;
 });
 
-// Показать все записи из БД
 $app->get('/users', function (Request $request, Response $response) {
     $storage = new UserJsonStorage();
     $users = $storage->all();
@@ -47,42 +45,65 @@ $app->get('/users/{id}', function (Request $request, Response $response, $args) 
     return $response->withHeader('Content-Type', 'application/json');
 })->setName('users.show');
 
-
-
-$app->put('/users/{id}', function (Request $request, Response $response, $args) {
+$app->put("/users/{id}", function (Request $request, Response $response, $args) {
     $storage = new UserJsonStorage();
     $id = $args['id'];
 
-    $user = $storage->getById($id);
+    $newDataUsers = $request->getParsedBody();
 
-    if (!empty($user)) {
-        $user = $storage->update($id);
+    $findUser = $storage->getById($id);
+    $encodedUser = $findUser->toArray($findUser);
+
+    if (isset($data['id']) && $newDataUsers['id'] !== $encodedUser['id']) {
+        $response->getBody()->write(json_encode([
+            "data" => $newDataUsers,
+            "code" => 422,
+            "message" => "Неправильное значение id= {$newDataUsers['id']}"
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    } elseif (!empty($findUser)) {
+        $merged = [firstN($encodedUser), $newDataUsers];
+        $storage->update($merged);
+        $response->getBody()->write(json_encode([
+            "data" => $merged,
+            "code" => 200,
+            "message" => "Данные успешно обновлены"
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
 
     return $response
         ->withHeader('Content-Type', 'application/json');
-})->setName('users.update');
+});
 
 $app->delete("/users/{id}", function (Request $request, Response $response, $args) {
     $storage = new UserJsonStorage();
     $id = $args['id'];
 
-    $storage->getById($id);
-    $storage->delete($id);
+    $findUser = $storage->getById($id);
+    $encodedUser = $findUser->toArray($findUser);
+
+    $storage->delete($encodedUser['id']);
+
+    $response->getBody()->write(json_encode([
+        "data" => $encodedUser,
+        "code" => 200,
+        "message" => "Данные успешно удалены"
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
     return $response
         ->withHeader('Content-Type', 'application/json');
 })->setName('users.destroy');
 
-// POST http::localhost:8080/users
 $app->post('/users', function (Request $request, Response $response) {
     $data = $request->getParsedBody();
 
     $storage = new UserJsonStorage();
-    $user = $storage->create($data);
+    $storage->create($data);
 
-    $encodedUser = json_encode($user->toArray());
-    $response->getBody()->write($encodedUser);
+    $response->getBody()->write(json_encode([
+        "data" => $data,
+        "code" => 200,
+        "message" => "Данные успешно добавлены"
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
     return $response->withHeader('Content-Type', 'application/json');
 })->setName('users.store');

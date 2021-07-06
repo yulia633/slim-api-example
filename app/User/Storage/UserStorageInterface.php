@@ -10,7 +10,7 @@ interface UserStorageInterface
 
     public function getById(string $id): User;
 
-    public function create(array $data): User;
+    public function create(array $data): void;
 
     public function update(array $data);
 
