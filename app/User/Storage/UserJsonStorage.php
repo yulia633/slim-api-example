@@ -34,9 +34,9 @@ class UserJsonStorage implements UserStorageInterface
         throw new \DomainException('User not Found');
     }
 
-    public function create(array $data): void
+    public function create(array $userData): void
     {
-        $user = User::fromArray($data);
+        $user = User::fromArray($userData);
         $id = uniqid();
 
         $user->id = $id;
@@ -45,12 +45,14 @@ class UserJsonStorage implements UserStorageInterface
         $user = JsonStorage::writeFile($users);
     }
 
-    public function update(array $data)
+    public function update(array $userData): void
     {
         $users = $this->all();
-        [$idUsers, $newUsers] = $data;
+
+        [$idUsers, $newUsers] = $userData;
+
         $updateUsers = array_map(function ($user) use ($newUsers, $idUsers) {
-            if ($user['id'] === $idUsers['id']) {
+            if ($user['id'] === $idUsers) {
                 $user['username'] = $newUsers['username'];
                 $user['email'] = $newUsers['email'];
             }
@@ -60,12 +62,13 @@ class UserJsonStorage implements UserStorageInterface
         $users[] = JsonStorage::writeFile($updateUsers);
     }
 
-    public function delete(string $id)
+    public function delete(string $id): void
     {
         $users = $this->all();
+        $userData = json_decode($id, JSON_OBJECT_AS_ARRAY);
 
-        $deleteUsers = array_filter($users, function ($user) use ($id) {
-            if ($user['id'] !== $id) {
+        $deleteUsers = array_filter($users, function ($user) use ($userData) {
+            if ($user['id'] !== $userData['id']) {
                 return $user;
             }
         });

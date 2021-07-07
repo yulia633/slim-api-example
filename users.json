@@ -1,18 +1,8 @@
 {
-    "2": {
-        "id": "60e45e59bd44f",
-        "username": "Renat12",
-        "email": "test@test.ru"
-    },
-    "3": {
-        "id": "60e45e8adcf75",
-        "username": "Renat13",
-        "email": "test@test.ru"
-    },
     "4": {
         "id": "60e45ea48b1dd",
-        "username": "Ira2",
-        "email": "ira@test.ru"
+        "username": "Ira Fira",
+        "email": "irafira@test.ru"
     },
     "5": {
         "id": "60e462a5c4053",
@@ -34,9 +24,9 @@
         "username": "Turanga Lila",
         "email": "lilatur@mail.ru"
     },
-    "9": {
-        "id": "60e49e715405d",
-        "username": "Fray",
-        "email": "fray@mail.ru"
+    "10": {
+        "id": "60e5cdb009897",
+        "username": "Murder",
+        "email": "murderpochta@mail.ru"
     }
 }

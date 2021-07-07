@@ -6,7 +6,6 @@ use Slim\Factory\AppFactory;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\User\Storage\UserJsonStorage;
-use function Funct\Collection\firstN;
 
 $app = AppFactory::create();
 $app->addErrorMiddleware(true, true, true);
@@ -47,37 +46,35 @@ $app->put("/users/{id}", function (Request $request, Response $response, $args) 
     $storage = new UserJsonStorage();
     $id = $args['id'];
 
-    $newDataUsers = $request->getParsedBody();
+    $userNewData = $request->getParsedBody();
+    $userData = $storage->getById($id)->toArray();
+    $userDataId = $userData['id'];
 
-    $findUser = $storage->getById($id);
-    $encodedUser = $findUser->toArray($findUser);
+    $newUserList = [$userDataId, $userNewData];
+    $storage->update($newUserList);
 
-    if (!empty($findUser)) {
-        $merged = [firstN($encodedUser), $newDataUsers];
-        $storage->update($merged);
-        return $helper->response($response, $merged, "Данные успешно обновлены", 201);
-    }
+    return $helper->response($response, $userNewData, "Данные успешно обновлены", 201);
 });
 
 $app->delete("/users/{id}", function (Request $request, Response $response, $args) use ($helper) {
     $storage = new UserJsonStorage();
     $id = $args['id'];
 
-    $findUser = $storage->getById($id);
-    $encodedUser = $findUser->toArray($findUser);
+    $userData = $storage->getById($id)->toArray();
 
-    $storage->delete($encodedUser['id']);
+    $encodedData = json_encode($userData);
+    $storage->delete($encodedData);
 
-    return $helper->response($response, $encodedUser, "Данные успешно удалены", 200);
-})->setName('users.destroy');
+    return $helper->response($response, $userData, "Данные успешно удалены", 201);
+});
 
 $app->post('/users', function (Request $request, Response $response) use ($helper) {
-    $data = $request->getParsedBody();
+    $userData = $request->getParsedBody();
 
     $storage = new UserJsonStorage();
-    $storage->create($data);
+    $storage->create($userData);
 
-    return $helper->response($response, $data, "Данные успешно добавлены", 200);
+    return $helper->response($response, $userData, "Данные успешно добавлены", 200);
 })->setName('users.store');
 
 $app->run();

@@ -12,7 +12,7 @@ interface UserStorageInterface
 
     public function create(array $data): void;
 
-    public function update(array $data);
+    public function update(array $data): void;
 
-    public function delete(string $id);
+    public function delete(string $id): void;
 }
