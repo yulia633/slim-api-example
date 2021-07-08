@@ -10,9 +10,24 @@ SLIM v4, JSON, CRUD, REST API
 
 ```bash
 git clone https://github.com/yulia633/slim-api-example.git && cd slim-api-example-main
-make prepare-db
 make install
 make start
+```
+
+### Подготовка данных и миграция
+
+Сделать исполняемым файл bin/seed
+
+```bash
+chmod u+x
+```
+
+Затем выполнить
+
+```bash
+prepare-db
+prepare-seed
+prepare-json
 ```
 
 # Методы
@@ -34,32 +49,32 @@ GET `/users`
 ```json
 {
     "data": {
-        "4": {
+        "60e45ea48b1dd": {
             "id": "60e45ea48b1dd",
             "username": "Ira Fira",
             "email": "irafira@test.ru"
         },
-        "5": {
+        "60e462a5c4053": {
             "id": "60e462a5c4053",
             "username": "Maria2",
             "email": "test3@test.ru"
         },
-        "6": {
+        "60e49e20481cc": {
             "id": "60e49e20481cc",
             "username": "Toby",
             "email": "tobyemail@mail.ru"
         },
-        "7": {
+        "60e49e4cb0f70": {
             "id": "60e49e4cb0f70",
             "username": "Garry",
             "email": "potter@mail.ru"
         },
-        "8": {
+        "60e49e6d1cca4": {
             "id": "60e49e6d1cca4",
             "username": "Turanga Lila",
             "email": "lilatur@mail.ru"
         },
-        "9": {
+        "60e49e715405d": {
             "id": "60e49e715405d",
             "username": "Fray",
             "email": "fray@mail.ru"
