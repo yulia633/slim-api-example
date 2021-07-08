@@ -41,7 +41,8 @@ class UserJsonStorage implements UserStorageInterface
 
         $user->id = $id;
         $users = JsonStorage::readFile();
-        $users[] = $user->toArray();
+        $users[$id] = $user->toArray();
+
         $user = JsonStorage::writeFile($users);
     }
 
