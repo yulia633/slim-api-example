@@ -12,6 +12,12 @@ validate:
 prepare-db:
 	touch users.json
 
+prepare-seed:
+	bin/seed
+
+prepare-json:
+	cp users.example.json users.json || true
+
 lint:
 	composer exec -v phpcs -- --standard=PSR12 public app
 

@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+
+<?php
+
+$obj = (object)  [
+    '60e45ea48b1dd' =>
+    [
+        'id' => '60e45ea48b1dd',
+        'username' => 'Ira Fira',
+        'email' => 'irafira@test.ru'
+    ]
+];
+
+$json = json_encode($obj);
+$file = fopen('users.example.json', 'w+');
+
+fwrite($file, $json);
+fclose($file);

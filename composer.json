@@ -28,6 +28,9 @@
             "Tests\\": "tests/"
         }
     },
+    "bin": [
+        "bin/seed"
+    ],
     "scripts": {
         "phpcs": "phpcs",
         "phpunit": "phpunit"
