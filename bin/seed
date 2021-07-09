@@ -2,7 +2,9 @@
 
 <?php
 
-$obj = (object)  [
+const USER_DATA_PATH = __DIR__ . '/../users.json';
+
+$content = [
     '60e45ea48b1dd' =>
     [
         'id' => '60e45ea48b1dd',
@@ -11,8 +13,6 @@ $obj = (object)  [
     ]
 ];
 
-$json = json_encode($obj);
-$file = fopen('users.example.json', 'w+');
-
-fwrite($file, $json);
-fclose($file);
+$json = json_encode($content);
+$encodedData = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR);
+file_put_contents(USER_DATA_PATH, $encodedData);

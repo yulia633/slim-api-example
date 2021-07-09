@@ -27,7 +27,6 @@ chmod u+x
 ```bash
 prepare-db
 prepare-seed
-prepare-json
 ```
 
 # Методы
