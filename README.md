@@ -25,8 +25,8 @@ chmod u+x
 Затем выполнить
 
 ```bash
-prepare-db
-prepare-seed
+make prepare-db
+make prepare-seed
 ```
 
 # Методы
