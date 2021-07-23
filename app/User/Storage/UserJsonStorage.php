@@ -69,9 +69,7 @@ class UserJsonStorage implements UserStorageInterface
         $userData = json_decode($id, JSON_OBJECT_AS_ARRAY);
 
         $deleteUsers = array_filter($users, function ($user) use ($userData) {
-            if ($user['id'] !== $userData['id']) {
-                return $user;
-            }
+            return $user['id'] !== $userData['id'];
         });
 
         JsonStorage::writeFile($deleteUsers);

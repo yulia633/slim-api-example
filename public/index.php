@@ -47,10 +47,7 @@ $app->put("/users/{id}", function (Request $request, Response $response, $args) 
     $id = $args['id'];
 
     $userNewData = $request->getParsedBody();
-    $userData = $storage->getById($id)->toArray();
-    $userDataId = $userData['id'];
-
-    $newUserList = [$userDataId, $userNewData];
+    $newUserList = [$id, $userNewData];
     $storage->update($newUserList);
 
     return $helper->response($response, $userNewData, "Данные успешно обновлены", 201);
